@@ -96,7 +96,7 @@ describe('Basic user flow for SPA ', () => {
     await page.click('img')
     expect(page.mainFrame().url()).toContain('/#settings')
 
-  });
+  }, 10000);
 
   it('Test8: On Settings page - checking page header title', async () => {
     // implement test8: Clicking on the settings icon should update the header to be “Settings”
@@ -174,7 +174,7 @@ describe('Basic user flow for SPA ', () => {
     //for (let i = 0; i < entries.length; i++) {
     data = await entries[0].getProperty('entry');
     plainValue = await data.jsonValue();
-    
+
     expect(page.mainFrame().url()).toContain('/#entry2');
 
   }, 10000);
@@ -210,11 +210,67 @@ describe('Basic user flow for SPA ', () => {
   }, 10000);
 
   // create your own test 17
+  it('7: Clicking third <journal-entry>, new URL should contain /#entry3', async () => {
+    // implement test17: Clicking on the third journal entry should update the URL to contain “/#entry2”
+    //global.window = jest.fn();
+    await page.goBack()
+    let data, plainValue;
+    await page.mouse.wheel({ deltaY: 1000 });
+    await page.mouse.click(300, 300)
+    //await page.goto("http://127.0.0.1:5500/#entry2");
+    const entries = await page.$$('entry-page');
+    //for (let i = 0; i < entries.length; i++) {
+    data = await entries[0].getProperty('entry');
+    plainValue = await data.jsonValue();
 
-  // create your own test 18
+    expect(page.mainFrame().url()).toContain('/#entry3');
 
-  // create your own test 19
+  }, 10000);
 
+  // // define and implement test15: Verify the title is current when clicking on the second entry
+  it('Test18: Clicking third <journal-entry>, new title should be Entry 2', async () => {
+    // implement test18: Clicking on the third journal entry should change title to Entry 2'
+    //global.window = jest.fn();
+    let data, plainValue;
+    const entries = await page.$$('h1');
+    //for (let i = 0; i < entries.length; i++) {
+    data = await entries[0].getProperty('innerHTML');
+    plainValue = await data.jsonValue();
+    expect(plainValue).toEqual('Entry 3')
+
+  }, 10000);
+
+  // define and implement test16: Verify the entry page contents is correct when clicking on the second entry
+  it('Test19: Clicking third <journal-entry>, new page contents should be correct', async () => {
+    // implement test19: Clicking on the third journal entry should change the page contents
+    //global.window = jest.fn();
+    let data, plainValue;
+    const entries = await page.$$('entry-page');
+    //for (let i = 0; i < entries.length; i++) {
+    data = await entries[0].getProperty('entry');
+    plainValue = await data.jsonValue();
+    expect(plainValue.title).toEqual('Ogres are like onions');
+    expect(plainValue.date).toEqual('4/27/2021');
+    expect(plainValue.content).toEqual("Onions have layers. Ogres have layers. Onions have layers. You get it? We both have layers.");
+    expect(plainValue.image.src).toEqual("https://advancelocal-adapter-image-uploads.s3.amazonaws.com/image.syracuse.com/home/syr-media/width2048/img/entertainment_impact/photo/shrek-donkeyjpg-daa31aa2b5bedfaa.jpg");
+    expect(plainValue.image.alt).toEqual("shrek and donkey looking confused");
+
+  }, 10000);
   // create your own test 20
+
+  // define and implement test11: Clicking the back button once should bring the user back to the second journal entry
+  it('Test20: Clicking the back button, the title should be Journal Entries', async () => {
+    // implement test10: Clicking on the back button should bring user back to the home page
+    // await page.click('journal-entry');
+    // await page.click('img')
+    await page.goBack();
+    //console.log(page.mainFrame().url())
+    let data, plainValue;
+    const entries = await page.$$('h1');
+    //for (let i = 0; i < entries.length; i++) {
+    data = await entries[0].getProperty('innerHTML');
+    plainValue = await data.jsonValue();
+    expect(plainValue).toEqual('Journal Entries')
+  }, 10000);
 
 });

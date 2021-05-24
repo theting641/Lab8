@@ -1,8 +1,9 @@
-import { pushToHistory } from "../scripts/router";
-
 /**
  * @jest-environment jsdom
  */
+
+import { pushToHistory } from "../scripts/router";
+
 describe('pushToHistory default', () => {
     test('default current', () => {
         //expect(history.length).toBe(2);
